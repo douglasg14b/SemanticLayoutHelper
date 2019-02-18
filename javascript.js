@@ -23,9 +23,9 @@ var layoutCheckboxes = {
 }
 
 var state = {
-	header: false,
+	header: true,
 	footer: false,
-	leftAside: false,
+	leftAside: true,
 	rightAside: false,
 	leftAsideFillTop: false,
 	rightAsideFillTop: false,
@@ -162,7 +162,7 @@ function init(){
     }
 
     console.log(layoutCheckboxes);
-    setCheckBoxStates();
+    updateState();
 }
 
 function itemCheckedHander(){
@@ -211,6 +211,9 @@ function setCheckBoxStates(){
 
         if(validState){
             layoutCheckboxes[keys[i]].element.removeClass('disabled');
+            if(state[layoutCheckboxes[keys[i]].element.find('input').attr('name')]){
+                layoutCheckboxes[keys[i]].element.checkbox('set checked');
+            }
         } else {
             layoutCheckboxes[keys[i]].element.addClass('disabled');
             layoutCheckboxes[keys[i]].element.checkbox('set unchecked')
@@ -257,7 +260,7 @@ function generateRegions(regionsState, index){
                 regionsState.addHorizontalRegion(index);
                 if (regionsState.hasFooter()) regionsState.addFooter(index);
                 
-                determineLongestSection(regionsState, index + 1);
+                generateRegions(regionsState, index + 1);
             
              //Covers footer. Header is longest
             } else if(!regionsState.asideCoversHeader()){
@@ -269,7 +272,7 @@ function generateRegions(regionsState, index){
                 if (regionsState.hasHeader()) regionsState.addHeader(index);
                 regionsState.addHorizontalRegion(index);
                 
-                determineLongestSection(regionsState, index + 1);
+                generateRegions(regionsState, index + 1);
 
             //Covers Header. Footer is longest
             } else if(!regionsState.asideCoversFooter()){
@@ -283,7 +286,7 @@ function generateRegions(regionsState, index){
                 //footer comes after section as flex row is top to bottom
                 if (regionsState.hasFooter()) regionsState.addFooter(index);
 
-                determineLongestSection(regionsState, index + 1);
+                generateRegions(regionsState, index + 1);
             }
         //Covers header and footer. Asides are longest
         } else if(regionsState.asideCoversHeader() && regionsState.asideCoversFooter()) {
@@ -303,7 +306,7 @@ function generateRegions(regionsState, index){
                 regionsState.addRightAside(index);
             }
 
-            determineLongestSection(regionsState, index + 1);
+            generateRegions(regionsState, index + 1);
         }
 
     //Aside only, add asides and content
@@ -315,7 +318,7 @@ function generateRegions(regionsState, index){
         regionsState.addContent(index);
         if(regionsState.hasRightAside()) regionsState.addRightAside(index);   
         
-        determineLongestSection(regionsState, index + 1);
+        generateRegions(regionsState, index + 1);
     }
 
     return regionsState;
@@ -451,9 +454,9 @@ var layoutCheckboxes = {
 }
 
 var state = {
-	header: false,
+	header: true,
 	footer: false,
-	leftAside: false,
+	leftAside: true,
 	rightAside: false,
 	leftAsideFillTop: false,
 	rightAsideFillTop: false,
@@ -590,7 +593,7 @@ function init(){
     }
 
     console.log(layoutCheckboxes);
-    setCheckBoxStates();
+    updateState();
 }
 
 function itemCheckedHander(){
@@ -639,6 +642,9 @@ function setCheckBoxStates(){
 
         if(validState){
             layoutCheckboxes[keys[i]].element.removeClass('disabled');
+            if(state[layoutCheckboxes[keys[i]].element.find('input').attr('name')]){
+                layoutCheckboxes[keys[i]].element.checkbox('set checked');
+            }
         } else {
             layoutCheckboxes[keys[i]].element.addClass('disabled');
             layoutCheckboxes[keys[i]].element.checkbox('set unchecked')
@@ -685,7 +691,7 @@ function generateRegions(regionsState, index){
                 regionsState.addHorizontalRegion(index);
                 if (regionsState.hasFooter()) regionsState.addFooter(index);
                 
-                determineLongestSection(regionsState, index + 1);
+                generateRegions(regionsState, index + 1);
             
              //Covers footer. Header is longest
             } else if(!regionsState.asideCoversHeader()){
@@ -697,7 +703,7 @@ function generateRegions(regionsState, index){
                 if (regionsState.hasHeader()) regionsState.addHeader(index);
                 regionsState.addHorizontalRegion(index);
                 
-                determineLongestSection(regionsState, index + 1);
+                generateRegions(regionsState, index + 1);
 
             //Covers Header. Footer is longest
             } else if(!regionsState.asideCoversFooter()){
@@ -711,7 +717,7 @@ function generateRegions(regionsState, index){
                 //footer comes after section as flex row is top to bottom
                 if (regionsState.hasFooter()) regionsState.addFooter(index);
 
-                determineLongestSection(regionsState, index + 1);
+                generateRegions(regionsState, index + 1);
             }
         //Covers header and footer. Asides are longest
         } else if(regionsState.asideCoversHeader() && regionsState.asideCoversFooter()) {
@@ -731,7 +737,7 @@ function generateRegions(regionsState, index){
                 regionsState.addRightAside(index);
             }
 
-            determineLongestSection(regionsState, index + 1);
+            generateRegions(regionsState, index + 1);
         }
 
     //Aside only, add asides and content
@@ -743,7 +749,7 @@ function generateRegions(regionsState, index){
         regionsState.addContent(index);
         if(regionsState.hasRightAside()) regionsState.addRightAside(index);   
         
-        determineLongestSection(regionsState, index + 1);
+        generateRegions(regionsState, index + 1);
     }
 
     return regionsState;
