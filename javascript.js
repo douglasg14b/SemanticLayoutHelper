@@ -12,14 +12,14 @@ var regionTypes = {
 }
 
 var layoutCheckboxes = {
-    header: { element: null, requires: []},
-    footer: { element: null, requires: []},
-    leftAside: { element: null, requires: []},
-    rightAside: { element: null, requires: []},
-    leftAsideFillTop: { element: null, requires: ['leftAside', 'header']},
-    rightAsideFillTop: { element: null, requires: ['rightAside', 'header']},
-    leftAsideFillBottom: { element: null, requires: ['leftAside', 'footer']},
-    rightAsideFillBottom: { element: null, requires: ['rightAside', 'footer']},
+    header: { element: null, requires: [], deniedBy: [], enabledBy: []},
+    footer: { element: null, requires: [], deniedBy: [], enabledBy: []},
+    leftAside: { element: null, requires: [], deniedBy: [], enabledBy: []},
+    rightAside: { element: null, requires: [], deniedBy: [], enabledBy: []},
+    leftAsideFillTop: { element: null, requires: ['leftAside', 'header'], deniedBy: ['rightAsideFillBottom'], enabledBy: ['rightAsideFillBottom', 'rightAsideFillTop']},
+    rightAsideFillTop: { element: null, requires: ['rightAside', 'header'], deniedBy: ['leftAsideFillBottom'], enabledBy: ['leftAsideFillBottom', 'leftAsideFillTop']},
+    leftAsideFillBottom: { element: null, requires: ['leftAside', 'footer'], deniedBy: ['rightAsideFillTop'], enabledBy: ['rightAsideFillBottom', 'rightAsideFillTop']},
+    rightAsideFillBottom: { element: null, requires: ['rightAside', 'footer'], deniedBy: ['leftAsideFillTop'], enabledBy: ['leftAsideFillBottom', 'leftAsideFillTop']},
 }
 
 var state = {
@@ -58,6 +58,26 @@ function setCheckBoxStates(){
     let keys = Object.keys(layoutCheckboxes);
     for(let i = 0; i < keys.length; i++){
         let validState = true;
+
+        //Denied by
+        for(let j = 0; j <layoutCheckboxes[keys[i]].deniedBy.length; j++ ){
+            if(state[layoutCheckboxes[keys[i]].deniedBy[j]]){
+                validState = false;
+            }
+        }
+
+        if(layoutCheckboxes[keys[i]].enabledBy.length > 0){
+            //enabled by
+            let reenabled = layoutCheckboxes[keys[i]].enabledBy.every(function(item){ return state[item] == true; });
+
+            if(reenabled ) {
+                console.log(`${keys[i]} enabled`);
+                validState = true;
+            }
+        }
+
+
+
         for(let j = 0; j <layoutCheckboxes[keys[i]].requires.length; j++ ){
             if(!state[layoutCheckboxes[keys[i]].requires[j]]){
                 validState = false;
