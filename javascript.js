@@ -93,115 +93,95 @@ function setCheckBoxStates(){
 }
 
 function generateRegions(){
-    let numRegions = 1;
-    
-    var regions = {
-        first: {
+    var regions = [
+        {
             active: true,
             vertical: false,
             content: []
         },
-        second: {
+        {
             active: false,
             vertical: false,
             content: []
         },
-        third: {
+        {
+        
             active: false,
             vertical: false,
             content: []
         }
-    }
+    ]
 
 	let firstRegionVertical = false;
 	let secondRegionVertical = false;
     let thirdRegionVertical = false;
 
     if(!hasHeaderOrFooter() && !hasAside()){ //No Header, No Footer
-        regions.first.content.push(regionTypes.content);
+        regions[0].content.push(regionTypes.content);
     } else if (!hasHeaderOrFooter() && hasAside()){
-        regions.first.vertical = false;
+        regions[0].vertical = false;
 
-        if(state.leftAside) regions.first.content.push(regionTypes.aside);
-        regions.first.content.push(regionTypes.content);
-        if(state.rightAside) regions.first.content.push(regionTypes.aside);
+        if(state.leftAside) regions[0].content.push(regionTypes.aside);
+        regions[0].content.push(regionTypes.content);
+        if(state.rightAside) regions[0].content.push(regionTypes.aside);
 
     } else if(hasHeaderOrFooter() && !hasAside()){ //Header || Footer, No Aside
-        regions.first.vertical = true;
+        regions[0].vertical = true;
 
-        if(state.header) regions.first.content.push(regionTypes.header);
-        regions.first.content.push(regionTypes.content);
-        if(state.footer) regions.first.content.push(regionTypes.footer);
+        if(state.header) regions[0].content.push(regionTypes.header);
+        regions[0].content.push(regionTypes.content);
+        if(state.footer) regions[0].content.push(regionTypes.footer);
 
     } else if(hasHeaderOrFooter() && hasAside()) {
-        regions.second.active = true;
-        regions.second.vertical = false;
+        regions[1].active = true;
+        regions[1].vertical = false;
 
         if(!asideCoversHeader() || !asideCoversFooter()){
-            regions.first.vertical = true;
+            regions[0].vertical = true;
 
             //1st region
-            if(state.header) regions.first.content.push(regionTypes.header);
-            regions.first.content.push(regions.second.vertical ? regionTypes['verticalRegion'] : regionTypes['horizontalRegion']); //2nd region
-            if(state.footer) regions.first.content.push(regionTypes.footer);
+            if(state.header) regions[0].content.push(regionTypes.header);
+            regions[0].content.push(regions[1].vertical ? regionTypes['verticalRegion'] : regionTypes['horizontalRegion']); //2nd region
+            if(state.footer) regions[0].content.push(regionTypes.footer);
 
             //2nd region
-            if(state.leftAside) regions.second.content.push(regionTypes.aside);
-            regions.second.content.push(regionTypes.content);
-            if(state.rightAside) regions.second.content.push(regionTypes.aside);
+            if(state.leftAside) regions[1].content.push(regionTypes.aside);
+            regions[1].content.push(regionTypes.content);
+            if(state.rightAside) regions[1].content.push(regionTypes.aside);
         } else if(asideCoversHeader() && asideCoversFooter()){
-            regions.first.vertical = false;
-            regions.second.active = true;
-            regions.second.vertical = true;
+            regions[0].vertical = false;
+            regions[1].active = true;
+            regions[1].vertical = true;
 
             //1st region
-            if(hasLeftAside()) regions.first.content.push(regionTypes.aside);
-            regions.first.content.push(regions.second.vertical ? regionTypes['verticalRegion'] : regionTypes['horizontalRegion']); //2nd region
-            if(hasRightAside()) regions.first.content.push(regionTypes.aside);
+            if(hasLeftAside()) regions[0].content.push(regionTypes.aside);
+            regions[0].content.push(regions[1].vertical ? regionTypes['verticalRegion'] : regionTypes['horizontalRegion']); //2nd region
+            if(hasRightAside()) regions[0].content.push(regionTypes.aside);
 
             //2nd region
-            if(hasHeader()) regions.second.content.push(regionTypes.header);
-            regions.second.content.push(regionTypes.content);
-            if(hasFooter()) regions.second.content.push(regionTypes.footer);
+            if(hasHeader()) regions[1].content.push(regionTypes.header);
+            regions[1].content.push(regionTypes.content);
+            if(hasFooter()) regions[1].content.push(regionTypes.footer);
+        } else if(asideCoversHeader()){
+            regions[0].vertical = true;
+            regions[1].active = true;
+            regions[1].vertical = false;
+            regions[2].active = true;
+            regions[2].vertical = true;
 
+            //1st region
+            regions[0].content.push(regions[1].vertical ? regionTypes['verticalRegion'] : regionTypes['horizontalRegion']); //2nd region
+            if(hasFooter()) regions[0].content.push(regionTypes.footer);
+
+            //2nd Region
+            if(hasLeftAside()) regions[1].content.push(regionTypes.aside);
+            regions[1].content.push(regions[2].vertical ? regionTypes['verticalRegion'] : regionTypes['horizontalRegion']); //3rd region
+            if(hasRightAside()){}
+
+        } else if(asideCoversFooter()){
 
         }
-
-
-
-        /*if(asideCoversHeader() || asideCoversFooter()){
-            regions.first.vertical = false; //first region is column based
-
-            if(asideCoversHeader() && hasHeader()){
-
-            }
-
-            if(state.leftAside){}
-        }
-        else {
-            regions.first.vertical = true;
-            if(state.header) regions.first.content.push(getContentHtml('header'));
-        }*/
-
     }
-
-    /*if(!state.header && !state.footer){
-        firstRegionVertical = false;
-    } else if(state.header && !asideCoversHeader()){
-        firstRegionVertical = true;
-    } else if(state.header && asideCoversHeader()){
-        firstRegionVertical = false;
-        secondRegionVertical = 
-        numRegions = 2;
-    }
-    
-    if(!state.header && !state.footer){ //No header, no footer. So column-based layout
-        firstRegionVertical = false;
-    } else if((state.leftAside || state.rightAside) && (state.leftSideFillTop || state.rightAsideFillTop)) { //If header or footer && aside fills top, then column based layout
-        firstRegionVertical = false;
-    } else {
-        firstRegionVertical = true; 
-    }*/
 
     renderLayout(regions);
 }
@@ -218,22 +198,22 @@ function renderLayout(regions){
 }
 
 function renderRegions(regions, $layoutRoot){
-    $firstRegion = $(getContentHtml(regions.first.vertical ? 'verticalRegion' : 'horizontalRegion'));
-    let firstRegionContent = regions.first.content;
-    renderRegion($firstRegion, regions, 'first')
+    $firstRegion = $(regions[0].vertical ? regionTypes['verticalRegion'].html : regionTypes['horizontalRegion'].html);
+    renderRegion($firstRegion, regions, 0)
 
     $layoutRoot.append($firstRegion);
 }
 
-function renderRegion($region, regions, regionNumberName){
-    let regionContent = regions[regionNumberName].content;
+function renderRegion($region, regions, regionNumber){
+    let regionContent = regions[regionNumber].content;
     for(let i = 0; i < regionContent.length; i++){
         if(regionContent[i].name == 'verticalRegion' || regionContent[i].name == 'horizontalRegion'){
-            //debugger;
+            debugger;
             $nextRegion = $(regionContent[i].html);
-            renderRegion($nextRegion, regions, 'second');
+            renderRegion($nextRegion, regions, regionNumber + 1);
             $region.append($nextRegion);
         } else {
+            debugger;
             $region.append($(regionContent[i].html));
         }
     }
@@ -312,23 +292,3 @@ function asideCoversFooter(){
 }
 
 init();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
