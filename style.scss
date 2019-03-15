@@ -3,164 +3,185 @@ body {
 }
 
 .ui {
-  &.region {
+    &.region {
+  
+      &.base {
+        display: flex;
+        flex: 0 1 auto;
+        box-sizing: border-box;
+        min-width: 0;
+        min-height: 0;
+        height: 100%;
+  
+          &.horizontal {
+            flex-direction: row;
+            position: relative;
+          }
+  
+          &.vertical {
+            flex-direction: column;
+            position: relative;
+            &:not(.container){
+              width: 100%;
+            }
+          }
+  
+          &.scrolling {
+            overflow-y: auto;
+          }
+      }
+  
+      &.top {
+        flex-shrink: 0;
+        box-sizing: border-box;
+      }
+  
+      &.center {
+        display: block;
+        flex: 1;
+        flex-basis: auto;
+        box-sizing: border-box;
+        
+          &.scrolling {
+            overflow-y: auto;
+          }
+        
+        &.vertical {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+  
+      &.bottom {
+        box-sizing: border-box;
+        flex-shrink: 0;
+      }
+  
+      &.aside {
+        box-sizing: border-box;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: row;
 
-    &.base {
-      display: flex;
-      flex: 1;
-      box-sizing: border-box;
-      min-width: 0;
-      min-height: 0;
-      height: 100%;
+        > .ui.attached.vertical.menu {
+          margin: 0; //Prevents issues with an attached horizontal menu
+        }
+        
+        &.scrolling {
+          overflow-y: scroll;
+        }
 
-        &.horizontal {
+        &.sticky {
+          position: sticky;
+          top: 0;
+          z-index: inherit !important;
+        }
+      }
+    }
+  }
+  
+  /*    Visualization for testing     */
+  .page.view {
+    height: 300px;
+    max-height: 300px;
+  
+    .ui.region {
+      &.top, &.bottom {
+        background-color: #C8C8C8;
+        line-height: 60px;
+        text-align: center;
+        min-height:60px;
+      }
+  
+      &.top::before {
+        content: 'Header';
+      }
+  
+      &.bottom::before {
+        content: 'Footer';
+      }
+  
+      &.center {
+        background-color: #F3F3F3;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+  
+        &::before {
+          content: 'Content';
+        }
+      }
+  
+      &.aside {
+        background-color: #DBDBDB;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow-x: none;
+  
+        &::before {
+          content: 'Aside';
+        }
+      }
+    }
+  
+    &.helper {
+      .ui.region {
+        &.top, &.bottom, &.center, &.aside{
+          background: none;
+          border: 1px outset black;
+        }
+  
+        &.horizontal.base {
           flex-direction: row;
           position: relative;
+          
+          &:hover {
+            border: 1px solid black;
+            background-color: rgba(210, 26, 26, 0.5);
+  
+            &::before {
+              background-color: rgba(210, 26, 26, 0.5);
+            }
+          }
+  
+          &::before {
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background-color: rgba(210, 26, 26, 0.2);
+            content: '';
+          }
+  
+          >.vertical:before {
+            background-color: mix(rgba(26, 48, 210, 0.2), rgba(210, 26, 26, 0.2), 50%);
+          }
         }
-
-        &.vertical {
+  
+        &.vertical.base {
           flex-direction: column;
           position: relative;
-        }
-    }
-
-    &.top {
-      height: 60px;
-      flex-shrink: 0;
-      box-sizing: border-box;
-    }
-
-    &.center {
-      display: block;
-      flex: 1;
-      flex-basis: auto;
-      overflow: auto;
-      box-sizing: border-box;
-    }
-
-    &.bottom {
-      padding: 0 20px;
-      box-sizing: border-box;
-      flex-shrink: 0;
-    }
-
-    &.aside {
-      overflow: auto;
-      box-sizing: border-box;
-      flex-shrink: 0;
-    }
-  }
-}
-
-
-.page.view {
-  height: 300px;
-  max-height: 300px;
-
-  .ui.region {
-    &.top, &.bottom {
-      background-color: #C8C8C8;
-      line-height: 60px;
-      text-align: center;
-      min-height:60px;
-    }
-
-    &.top::before {
-      content: 'Header';
-    }
-
-    &.bottom::before {
-      content: 'Footer';
-    }
-
-    &.center {
-      background-color: #F3F3F3;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      &::before {
-        content: 'Content';
-      }
-    }
-
-    &.aside {
-      background-color: #DBDBDB;
-      text-align: center;
-      width: 80px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      &::before {
-        content: 'Aside';
-      }
-    }
-  }
-
-  &.region {
-    .ui.region {
-      &.top, &.bottom, &.center, &.aside{
-        background: none;
-        border: 1px outset black;
-      }
-
-      &.horizontal.base {
-        flex-direction: row;
-        position: relative;
-        
-        &:hover {
-          border: 1px solid black;
-          background-color: rgba(210, 26, 26, 0.5);
-
+  
+          &:hover {
+            border: 1px solid black;
+  
+            &::before {
+              background-color: rgba(26, 48, 210, 0.5);
+            }
+          }
+  
           &::before {
-            background-color: rgba(210, 26, 26, 0.5);
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            content: '';
+            background-color: rgba(26, 48, 210, 0.2);
+          }
+  
+          >.horizontal:before {
+            background-color: mix(rgba(26, 48, 210, 0.2), rgba(210, 26, 26, 0.2), 50%);
           }
         }
-
-        &::before {
-          position: absolute;
-          top: 0; right: 0; bottom: 0; left: 0;
-          background-color: rgba(210, 26, 26, 0.2);
-          content: '';
-        }
-
-        >.vertical:before {
-          background-color: mix(rgba(26, 48, 210, 0.2), rgba(210, 26, 26, 0.2), 50%);
-        }
-      }
-
-      &.vertical.base {
-        flex-direction: column;
-        position: relative;
-
-        &:hover {
-          border: 1px solid black;
-
-          &::before {
-            background-color: rgba(26, 48, 210, 0.5);
-          }
-        }
-
-        &::before {
-          position: absolute;
-          top: 0; right: 0; bottom: 0; left: 0;
-          content: '';
-          background-color: rgba(26, 48, 210, 0.2);
-        }
-
-        >.horizontal:before {
-          background-color: mix(rgba(26, 48, 210, 0.2), rgba(210, 26, 26, 0.2), 50%);
-        }
       }
     }
   }
-}
-
-
-
-
-
-
-
